@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://project-production-49f6.up.railway.app'
+    'https://project-production-49f6.up.railway.app',
   ],
   credentials: true
 }));

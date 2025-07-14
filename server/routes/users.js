@@ -31,6 +31,34 @@ router.put('/profile', requireAuth, async (req, res) => {
   }
 });
 
+// Admin: Create a custom admin user (for setup, remove or protect after use)
+router.post('/create-admin', async (req, res) => {
+  try {
+    const { firstName, lastName, email, password } = req.body;
+
+    // Check if admin already exists
+    const existingAdmin = await User.findOne({ email });
+    if (existingAdmin) {
+      return res.status(400).json({ message: 'Admin with this email already exists' });
+    }
+
+    // Create new admin user
+    const admin = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      role: 'admin', // Make sure your User model supports a 'role' field
+      isActive: true
+    });
+
+    await admin.save();
+    res.status(201).json({ message: 'Admin user created successfully' });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // Admin: Get all users
 router.get('/', requireAdmin, async (req, res) => {
   try {
